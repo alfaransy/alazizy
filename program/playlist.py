@@ -1,4 +1,4 @@
-# Copyright (C) 2021 By Amort Music-Project
+# Copyright (C) 2021 By Veez Music-Project
 # Commit Start Date 20/10/2021
 # Finished On 28/10/2021
 
@@ -15,11 +15,11 @@ from driver.filters import command, other_filters
 
 
 keyboard = InlineKeyboardMarkup(
-    [[InlineKeyboardButton("🗑 إغلاق", callback_data="cls")]]
+    [[InlineKeyboardButton("🗑 اغلاق", callback_data="cls")]]
 )
 
 
-@Client.on_message(command(["playlist", f"playlist@{BOT_USERNAME}", "queue", f"queue@{BOT_USERNAME}"]) & other_filters)
+@Client.on_message(command(["playlist", f"القائمه", "لست", f"قائمه"]) & other_filters)
 async def playlist(client, m: Message):
    chat_id = m.chat.id
    if chat_id in QUEUE:
@@ -36,4 +36,4 @@ async def playlist(client, m: Message):
             QUE = QUE + "\n" + f"**#{x}** - [{han}]({hok}) | `{hap}`"
          await m.reply(QUE, reply_markup=keyboard, disable_web_page_preview=True)
    else:
-      await m.reply("❌ **لا شي يشتغل حاليآ**")
+      await m.reply("❌ **قائمة التشغيل فارغه**")

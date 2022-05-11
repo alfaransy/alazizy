@@ -35,7 +35,7 @@ ydl_opts = {
 }
 
 
-@Client.on_message(command(["song", f"song@{bn}"]) & ~filters.edited)
+@Client.on_message(command(["حميل", f"تحميل", "song"]) & ~filters.edited)
 def song(_, message):
     query = " ".join(message.command[1:])
     m = message.reply("🔎 جاري البحث انتظر قليلآ...")
@@ -60,7 +60,7 @@ def song(_, message):
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = f"**🎧 يتم التحميل @{bn}**"
+        rep = f"**🎧 الرافع [🎶 𝑺𝑯𝑨𝑫𝑶𝑾 𝑴𝑼𝑺𝑰𝑪 ](https://t.me/Joker7x_bot)**"
         secmul, dur, dur_arr = 1, 0, duration.split(":")
         for i in range(len(dur_arr) - 1, -1, -1):
             dur += int(float(dur_arr[i])) * secmul
@@ -76,7 +76,7 @@ def song(_, message):
         )
         m.delete()
     except Exception as e:
-        m.edit("❌ خطاء")
+        m.edit("❌ خطأ")
         print(e)
 
     try:
@@ -87,7 +87,7 @@ def song(_, message):
 
 
 @Client.on_message(
-    command(["vsong", f"vsong@{bn}", "video", f"video@{bn}"]) & ~filters.edited
+    command(["vsong", f"vsong@{bn}", "video", f"فيديو"]) & ~filters.edited
 )
 async def vsong(client, message):
     ydl_opts = {
@@ -119,7 +119,7 @@ async def vsong(client, message):
             ytdl_data = ytdl.extract_info(link, download=True)
             file_name = ytdl.prepare_filename(ytdl_data)
     except Exception as e:
-        return await msg.edit(f"🚫 **خطاء:** {e}")
+        return await msg.edit(f"🚫 **خطأ:** {e}")
     preview = wget.download(thumbnail)
     await msg.edit("📤 **جاري تحميل الفيديو...**")
     await message.reply_video(
@@ -135,11 +135,11 @@ async def vsong(client, message):
         print(e)
 
 
-@Client.on_message(command(["lyric", f"lyric@{bn}"]))
+@Client.on_message(command(["lyric", f"بحث"]))
 async def lyrics(_, message):
     try:
         if len(message.command) < 2:
-            await message.reply_text("» **قسم باارسال اسم المقطع**")
+            await message.reply_text("» **قم باارسال اسم المقطع**")
             return
         query = message.text.split(None, 1)[1]
         rep = await message.reply_text("🔎 **جاري البحث عن كلمات...**")

@@ -1,5 +1,9 @@
 import os
+import re
 import sys
+import asyncio
+import subprocess
+from asyncio import sleep
 
 from git import Repo
 from pyrogram.types import Message
@@ -9,6 +13,7 @@ from os import system, execle, environ
 from driver.decorators import sudo_users_only
 from git.exc import InvalidGitRepositoryError
 from config import UPSTREAM_REPO, BOT_USERNAME
+
 
 
 def gen_chlog(repo, diff):
@@ -34,7 +39,7 @@ def updater():
         repo = Repo()
     except InvalidGitRepositoryError:
         repo = Repo.init()
-        origin = repo.create_remote("upstream", UPSTREAM_REPO)
+        origin = repo.create_remote("upstream", "UPSTREAM_REPO")
         origin.fetch()
         repo.create_head("main", origin.refs.main)
         repo.heads.main.set_tracking_branch(origin.refs.main)
@@ -43,7 +48,7 @@ def updater():
     if "upstream" in repo.remotes:
         ups_rem = repo.remote("upstream")
     else:
-        ups_rem = repo.create_remote("upstream", UPSTREAM_REPO)
+        ups_rem = repo.create_remote("upstream", "UPSTREAM_REPO")
     ups_rem.fetch(ac_br)
     changelog, tl_chnglog = gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     return bool(changelog)
@@ -57,10 +62,10 @@ async def update_repo(_, message: Message):
     update_avail = updater()
     if update_avail:
         await msg.edit("✅ update finished\n\n• bot restarted, back active again in 1 minutes.")
-        system("git pull -f && pip3 install -r requirements.txt")
+        system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
         execle(sys.executable, sys.executable, "main.py", environ)
         return
-    await msg.edit("bot is **up-to-date** with [main](https://github.com/)", disable_web_page_preview=True)
+    await msg.edit(f"bot is **up-to-date** with [main](https://github.com/JOKER-7X/Shadowmic/tree/main)", disable_web_page_preview=True)
 
 
 @Client.on_message(command(["restart", f"restart@{BOT_USERNAME}"]) & ~filters.edited)
