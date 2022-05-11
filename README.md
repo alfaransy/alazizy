@@ -1,2 +1,2 @@
 # Shadowmic
-@xb_bp
+https://t.me/xb_bp
